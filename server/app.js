@@ -15,9 +15,9 @@ app.use(cookieParser())
 
 app.use('/users',/* authMiddleware,*/ userRoutes);
 
-app.get('/', (req, res) => {
-  res.send('Hello World!')
-  console.log('req: Hallo world')
+app.post('/login', (req, res) => {
+  console.log(req.body)
+  res.status(200)
 })
 
 app.listen(port, () => {
