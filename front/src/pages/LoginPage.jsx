@@ -1,5 +1,3 @@
-import { useLoaderData } from "react-router-dom";
-import { InputField } from "../components/LoginInput.jsx";
 import { useState } from "react";
 import axios from "axios";
 export default function ItemPage() {

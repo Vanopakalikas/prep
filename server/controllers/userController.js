@@ -4,13 +4,17 @@ import { genToken } from '../utils/gen.js'
 const userController = {
     createUser : async (req, res, next) => {
         const { name, email, password } = req.body;
-
+        console.log("req.body", req.body)
         try {
             const user = new User({ name, email, password });
-            await user.save();
-            const token = genToken(user._id);
-            res.cookie('token', token).status(201).json({
-                user
+            console.log("user", user)
+            const savedUser = await user.save();
+            console.log("savedUser")
+            const token = genToken({ name: name, email: email });
+            // Respond with the user data and token
+            res.cookie('token', token).status(201).json({ 
+                user: savedUser,
+                token 
             });
         } catch (error) {
             res.status(500).json({ error: error.message });
@@ -27,6 +31,20 @@ const userController = {
         } catch (error) {
             res.status(500).json({ error: error.message });
         }
+    },
+    checkAuth : async (req, res, next) => {
+        console.log(req.cookies, req.body)
+        try {
+            const token = req.cookies.token;
+            if (!token) { 
+                return res.send (false);
+            }
+            res.json({auth:true});
+    }   catch (error) {
+            res.send (true);
+            next()
+        }
     }
 }
+
 export default userController
